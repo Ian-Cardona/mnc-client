@@ -1,0 +1,35 @@
+# === Node.js ===
+node_modules/
+dist/
+build/
+
+# === Env ===
+.env*
+!.env.example
+
+# === Logs ===
+logs/
+*.log
+npm-debug.log*
+
+# === OS files ===
+.DS_Store
+Thumbs.db
+
+# === IDEs ===
+.vscode/
+.idea/
+
+# === TypeScript ===
+*.tsbuildinfo
+
+# === Misc ===
+coverage/
+.cache/
+*.tgz
+
+# === Lint ===
+.eslintcache
+
+# === Git ===
+*.orig
