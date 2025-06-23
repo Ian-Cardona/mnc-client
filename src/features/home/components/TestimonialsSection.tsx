@@ -1,29 +1,41 @@
-const TestimonialsSection = () => {
+import type { ITestimonial } from '../types/home.type';
+
+type Props = {
+  data: ITestimonial[];
+};
+
+const TestimonialsSection = ({ data }: Props) => {
+  const testimonials = [...data, ...data];
+
   return (
-    <section className="w-full">
+    <section className="w-full select-none">
       <h2 className="text-3xl font-bold text-center mb-10 text-gray-800">What Our Clients Say</h2>
-      <div className="flex overflow-x-auto space-x-6 pb-4 px-4">
-        <div className="bg-white p-6 rounded-xl shadow-md border border-gray-200 min-w-[320px] transition-transform hover:scale-105">
-          <h3 className="text-lg font-bold text-gray-900 mb-1">Juan Dela Cruz</h3>
-          <h4 className="text-md font-medium text-yellow-600 mb-2">Amazing Service!</h4>
-          <p className="text-sm text-gray-700">
-            MNC provided me with the best bookkeeping service I've ever had.
-          </p>
+      <div className="overflow-hidden w-full">
+        <div
+          className="flex space-x-6 pb-4 px-4"
+          style={{
+            width: testimonials.length * 340,
+            animation: 'scroll-x 30s linear infinite',
+          }}
+        >
+          {testimonials.map((testimonial, idx) => (
+            <div
+              key={idx}
+              className="bg-white p-6 rounded-xl shadow-md border border-gray-200 min-w-[320px] max-w-[320px] transition-transform"
+              style={{ pointerEvents: 'none' }}
+            >
+              <h3 className="text-lg font-bold text-gray-900 mb-1">{testimonial.testifier}</h3>
+              <h4 className="text-md font-medium text-yellow-600 mb-2">{testimonial.title}</h4>
+              <p className="text-sm text-gray-700">{testimonial.message}</p>
+            </div>
+          ))}
         </div>
-        <div className="bg-white p-6 rounded-xl shadow-md border border-gray-200 min-w-[320px] transition-transform hover:scale-105">
-          <h3 className="text-lg font-bold text-gray-900 mb-1">Maria Clara</h3>
-          <h4 className="text-md font-medium text-yellow-600 mb-2">Excellent Support</h4>
-          <p className="text-sm text-gray-700">
-            Timely, professional, and always willing to go the extra mile.
-          </p>
-        </div>
-        <div className="bg-white p-6 rounded-xl shadow-md border border-gray-200 min-w-[320px] transition-transform hover:scale-105">
-          <h3 className="text-lg font-bold text-gray-900 mb-1">Carlos Santos</h3>
-          <h4 className="text-md font-medium text-yellow-600 mb-2">Reliable Partner</h4>
-          <p className="text-sm text-gray-700">
-            Their service helped me focus on growing my business worry-free.
-          </p>
-        </div>
+        <style>{`
+          @keyframes scroll-x {
+            0% { transform: translateX(0); }
+            100% { transform: translateX(-50%); }
+          }
+        `}</style>
       </div>
     </section>
   );
