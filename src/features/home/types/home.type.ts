@@ -4,10 +4,19 @@ export interface ITestimonial {
   message: string;
 }
 
+export interface IServicesOfferedItem {
+  description: string;
+}
+
+export interface IServicesOffered {
+  title: string;
+  items: IServicesOfferedItem[];
+}
+
 export interface IHome {
-  id: string; 
   cta: string;
   heroTitle: string;
   heroContent: string;
   testimonials: ITestimonial[];
+  services: IServicesOffered[];
 }
