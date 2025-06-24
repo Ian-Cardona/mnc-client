@@ -12,6 +12,8 @@ export interface IFooterLink {
 }
 
 export interface IFooter {
+  header: string;
+  subheader: string;
   copyright: string;
   address: string;
   socials: ISocial[];

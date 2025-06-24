@@ -11,7 +11,10 @@ const Home = () => {
   });
 
   if (isLoading) return (
-    <div className="flex justify-center items-center min-h-[40vh] text-lg font-medium text-gray-700">Loading...</div>
+    <div className="flex flex-col justify-center items-center min-h-[40vh] text-lg font-medium text-gray-700">
+      <div className="w-12 h-12 border-4 border-yellow-400 border-t-transparent rounded-full animate-spin mb-4"></div>
+      <span>Loading homepage...</span>
+    </div>
   );
 
   if (isError) return (

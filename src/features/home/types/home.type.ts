@@ -17,6 +17,10 @@ export interface IHome {
   cta: string;
   heroTitle: string;
   heroContent: string;
+  servicesHeader: string;
+  servicesDescription: string;
+  testimonialsHeader: string;
+  testimonialsDescription: string;
   testimonials: ITestimonial[];
   services: IServicesOffered[];
 }
