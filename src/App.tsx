@@ -5,9 +5,11 @@ import Home from './pages/Home';
 
 function App() {
   return (
-    <div>
+    <div style={{ minHeight: '100vh', display: 'flex', flexDirection: 'column' }}>
       <NavBar />
-      <Home />
+      <div style={{ flex: 1 }}>
+        <Home />
+      </div>
       <Footer />
     </div>
   );
