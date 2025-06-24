@@ -1,10 +1,7 @@
 import * as React from 'react';
 import { useState } from 'react';
-import type { IFooter, Platform } from '../../features/footer/types/footer.type';
-
-interface FooterProps {
-  footer: IFooter;
-}
+import type { Platform } from '../../features/footer/types/footer.type';
+import { useFooter } from '../../features/footer/hooks/useFooter';
 
 const socialIcons: Record<Platform, React.JSX.Element> = {
   facebook: (
@@ -18,7 +15,8 @@ const socialIcons: Record<Platform, React.JSX.Element> = {
   ),
 };
 
-const Footer: React.FC<FooterProps> = ({ footer }) => {
+const Footer: React.FC = () => {
+  const { data: footer, isLoading, isError } = useFooter();
   const [email, setEmail] = useState('');
   const [phone, setPhone] = useState('');
   const [message, setMessage] = useState('');
@@ -45,6 +43,26 @@ const Footer: React.FC<FooterProps> = ({ footer }) => {
         setLoading(false);
       });
   };
+
+  if (isLoading) {
+    return (
+      <footer className="bg-neutral-900 text-gray-200 px-6 py-16">
+        <div className="max-w-6xl mx-auto text-center">
+          <div className="text-lg font-medium text-gray-400">Loading footer...</div>
+        </div>
+      </footer>
+    );
+  }
+
+  if (isError || !footer) {
+    return (
+      <footer className="bg-neutral-900 text-gray-200 px-6 py-16">
+        <div className="max-w-6xl mx-auto text-center">
+          <div className="text-red-400 text-lg font-medium">Failed to load footer</div>
+        </div>
+      </footer>
+    );
+  }
 
   return (
     <footer className="bg-neutral-900 text-gray-200 px-6 py-16">
