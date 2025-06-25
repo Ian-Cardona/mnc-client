@@ -1,9 +1,9 @@
-import type { IServicesOffered } from '../types/home.type';
+import type { IHome } from '../types/home.type';
 import { emeraldBg } from '../../../utils/colors';
 import { Check } from 'lucide-react';
 
 type Props = {
-  data: IServicesOffered[];
+  data: IHome;
 };
 
 const ServicesSection = ({ data }: Props) => {
@@ -11,14 +11,14 @@ const ServicesSection = ({ data }: Props) => {
     <section className="w-full py-12 lg:py-24 font-dm-sans bg-gray-50">
       <div className="max-w-6xl mx-auto px-4">
         <h2 className="text-3xl lg:text-5xl font-dm-sans font-bold text-center mb-4 text-gray-800">
-          Our Services
+          {data.servicesHeader}
         </h2>
         <div className="flex justify-center mb-8">
           <div className="w-16 h-1 bg-emerald-500"></div>
         </div>
-        <p className="text-center text-gray-500 mb-12 text-lg">Expert accounting and financial solutions for your business.</p>
+        <p className="text-center text-gray-500 mb-12 text-lg">{data.servicesDescription}</p>
         <div className="flex flex-col lg:flex-row justify-center items-stretch gap-8">
-          {data.map((service, idx) => (
+          {data.services.map((service, idx) => (
             <div
               key={service.title}
               className={`flex-1 p-8 lg:p-12 shadow-lg rounded-2xl bg-white text-center transition-transform duration-300 hover:scale-105 hover:shadow-2xl border border-gray-100 ${emeraldBg[idx] || emeraldBg[emeraldBg.length - 1]}`}

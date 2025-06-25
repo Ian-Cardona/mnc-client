@@ -9,9 +9,9 @@ const HeroSection = ({ data }: Props) => {
   return (
     <section className="mx-10 my-12 space-y-4 lg:my-24 lg:space-y-12">
       <div className="space-y-8 lg:flex lg:items-center lg:justify-between lg:space-y-0 lg:gap-12">
-        <h1 className="text-6xl lg:text-[10rem] font-dm-sans font-medium">{data.heroTitle}</h1>
+        <h1 className="text-6xl lg:text-[10rem] font-dm-sans font-medium">{data.hero.title}</h1>
         <h2 className="text-lg lg:text-3xl font-lato max-w-2xl lg:max-w-xl lg:ml-8">
-          {data.heroContent}
+          {data.hero.subtitle}
         </h2>
       </div>
       <button
@@ -41,7 +41,7 @@ const HeroSection = ({ data }: Props) => {
         }}
       >
         <Mail size={24} />
-        {data.cta}
+        {data.hero.cta}
       </button>
     </section>
   );
