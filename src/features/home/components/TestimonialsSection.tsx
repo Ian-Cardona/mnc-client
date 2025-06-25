@@ -1,15 +1,17 @@
-import type { ITestimonial } from '../types/home.type';
+import type { IHome } from '../types/home.type';
 
 type Props = {
-  data: ITestimonial[];
+  data: IHome;
 };
 
 const TestimonialsSection = ({ data }: Props) => {
-  const testimonials = [...data, ...data];
+  const testimonials = [...data.testimonials, ...data.testimonials];
 
   return (
     <section className="w-full select-none py-16">
-      <h2 className="text-3xl lg:text-5xl font-dm-sans font-bold text-center mb-10 text-gray-800">What Our Clients Say</h2>
+      <h2 className="text-3xl lg:text-5xl font-dm-sans font-bold text-center mb-10 text-gray-800">
+        {data.testimonialsHeader}
+      </h2>
       <div className="overflow-hidden w-full">
         <div
           className="flex space-x-6 lg:space-x-12 pb-4 px-4 lg:px-12"
@@ -25,8 +27,10 @@ const TestimonialsSection = ({ data }: Props) => {
               style={{ pointerEvents: 'none' }}
             >
               <span className="absolute top-3 left-3 text-yellow-300 text-xl select-none">“</span>
-              <h3 className="font-dm-sans text-base md:text-lg font-bold text-gray-900 mb-0.5 mt-6">{testimonial.testifier}</h3>
-              <h4 className="font-dm-sans text-xs md:text-sm font-medium text-yellow-600 mb-1">{testimonial.title}</h4>
+              <h3 className="font-dm-sans text-base md:text-lg font-bold text-gray-900 mb-0.5 mt-6">
+                {testimonial.testifier}
+              </h3>
+              <h4 className="font-dm-sans text-xs md:text-sm font-medium text-yellow-600 mb-1">{testimonial.company}</h4>
               <p className="font-lato text-xs md:text-sm text-gray-700 mb-1">{testimonial.message}</p>
             </div>
           ))}

@@ -1,7 +1,8 @@
 import * as React from 'react';
 import { useState, useRef, useEffect } from 'react';
 import type { Platform } from '../../features/footer/types/footer.type';
-import { useFooter } from '../../features/footer/hooks/useFooter';
+import { fetchFooter } from '../../features/footer/api/footer.api';
+import { useQuery } from '@tanstack/react-query';
 
 const socialIcons: Record<Platform, React.JSX.Element> = {
   facebook: (
@@ -15,8 +16,36 @@ const socialIcons: Record<Platform, React.JSX.Element> = {
   ),
 };
 
+// Reusable input/textarea field component
+const InputField: React.FC<{
+  as?: 'input' | 'textarea';
+  type?: string;
+  placeholder: string;
+  value: string;
+  onChange: (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => void;
+  disabled?: boolean;
+  required?: boolean;
+  rows?: number;
+  className?: string;
+}> = ({ as = 'input', type = 'text', ...props }) => {
+  const baseClass =
+    'font-lato px-4 py-2 lg:px-6 lg:py-3 rounded-md bg-neutral-900 text-gray-100 placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-yellow-400 border border-neutral-700 font-normal text-base lg:text-lg';
+  if (as === 'textarea') {
+    return <textarea {...props} className={baseClass + (props.className ? ' ' + props.className : '')} />;
+  }
+  return <input {...props} type={type} className={baseClass + (props.className ? ' ' + props.className : '')} />;
+};
+
+// Reusable section header
+const SectionHeader: React.FC<{ children: React.ReactNode }> = ({ children }) => (
+  <h2 className="text-2xl lg:text-4xl font-semibold mb-4 tracking-tight text-white">{children}</h2>
+);
+
 const Footer: React.FC = () => {
-  const { data: footer, isLoading, isError } = useFooter();
+  const { data, isLoading, isError } = useQuery({
+    queryKey: ['footer'],
+    queryFn: fetchFooter,
+  });
   const [email, setEmail] = useState('');
   const [phone, setPhone] = useState('');
   const [message, setMessage] = useState('');
@@ -61,7 +90,7 @@ const Footer: React.FC = () => {
     );
   }
 
-  if (isError || !footer) {
+  if (isError || !data) {
     return (
       <footer className="bg-neutral-900 text-gray-200 px-6 py-16 font-dm-sans">
         <div className="max-w-6xl mx-auto text-center">
@@ -71,6 +100,12 @@ const Footer: React.FC = () => {
     );
   }
 
+  const buttonClass =
+    'mt-2 px-4 py-2 lg:px-8 lg:py-3 bg-yellow-400 hover:bg-yellow-500 text-black rounded-md font-bold transition-colors disabled:opacity-60 shadow-md text-base lg:text-lg';
+  const linkClass = 'hover:text-yellow-400 transition-colors py-1 text-gray-200 font-medium';
+  const socialClass = 'text-gray-400 hover:text-yellow-400 transition-colors';
+  const infoClass = 'font-lato text-gray-400 text-sm lg:text-lg whitespace-pre-line';
+
   return (
     <footer className="bg-neutral-900 text-gray-200 px-6 py-16 lg:px-8 lg:py-32 font-dm-sans">
       <div className="max-w-7xl mx-auto flex flex-col md:flex-row gap-12 md:gap-24 items-start border-b border-neutral-800 pb-12 lg:pb-24">
@@ -78,36 +113,35 @@ const Footer: React.FC = () => {
           <h2 className="text-2xl lg:text-5xl font-semibold mb-2 tracking-tight text-white">Control your finances now</h2>
           <p className="mb-8 text-base lg:text-2xl text-gray-400 font-normal">We'd love to hear from you.</p>
           <form ref={formRef} className="flex flex-col gap-4 bg-neutral-800 p-6 lg:p-12 rounded-2xl shadow-2xl w-full max-w-lg" onSubmit={handleSubmit}>
-            <input
+            <InputField
               type="email"
               placeholder="Your email"
-              className="font-lato px-4 py-2 lg:px-6 lg:py-3 rounded-md bg-neutral-900 text-gray-100 placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-yellow-400 border border-neutral-700 font-normal text-base lg:text-lg"
               required
               value={email}
               onChange={e => setEmail(e.target.value)}
               disabled={loading}
             />
-            <input
+            <InputField
               type="tel"
               placeholder="Your contact number"
-              className="font-lato px-4 py-2 lg:px-6 lg:py-3 rounded-md bg-neutral-900 text-gray-100 placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-yellow-400 border border-neutral-700 font-normal text-base lg:text-lg"
               required
               value={phone}
               onChange={e => setPhone(e.target.value)}
               disabled={loading}
             />
-            <textarea
+            <InputField
+              as="textarea"
               placeholder="Your message"
-              className="font-lato px-4 py-2 lg:px-6 lg:py-3 rounded-md bg-neutral-900 text-gray-100 placeholder-gray-400 resize-none focus:outline-none focus:ring-2 focus:ring-yellow-400 border border-neutral-700 font-normal text-base lg:text-lg"
-              rows={4}
               required
               value={message}
               onChange={e => setMessage(e.target.value)}
               disabled={loading}
-            ></textarea>
+              rows={4}
+              className="resize-none"
+            />
             <button
               type="submit"
-              className="mt-2 px-4 py-2 lg:px-8 lg:py-3 bg-yellow-400 hover:bg-yellow-500 text-black rounded-md font-bold transition-colors disabled:opacity-60 shadow-md text-base lg:text-lg"
+              className={buttonClass}
               disabled={loading}
             >
               {loading ? 'Sending...' : 'Send Message'}
@@ -119,14 +153,14 @@ const Footer: React.FC = () => {
 
         <div className="w-full md:w-1/2 flex flex-col md:flex-row gap-8 md:gap-20 lg:gap-32">
           <div className="flex-1 flex flex-col gap-3 text-base lg:text-xl">
-            <h2 className="text-2xl lg:text-4xl font-semibold mb-4 tracking-tight text-white">Company</h2>
-            {footer.links
+            <SectionHeader>Company</SectionHeader>
+            {data.links
               .filter(link => link.label && link.path && link.label.toLowerCase() !== 'contact' && (link.label.toLowerCase() !== 'external link' || (link.label.toLowerCase() === 'external link' && link.path)))
               .map(link => (
                 <a
                   key={link.label}
                   href={link.path}
-                  className="hover:text-yellow-400 transition-colors py-1 text-gray-200 font-medium"
+                  className={linkClass}
                   target={link.external ? '_blank' : undefined}
                   rel={link.external ? 'noopener noreferrer' : undefined}
                 >
@@ -134,17 +168,19 @@ const Footer: React.FC = () => {
                 </a>
               ))}
           </div>
-          <div className="flex-1 flex flex-col gap-4">
-            <h2 className="text-2xl lg:text-4xl font-semibold mb-4 tracking-tight text-white">Contact</h2>
-            <div className="font-lato text-gray-400 text-sm lg:text-lg whitespace-pre-line">{footer.address}</div>
+          <div className="flex-1 flex flex-col gap-2">
+            <SectionHeader>Contact</SectionHeader>
+            <div className={infoClass}>Address: {data.info.address}</div>
+            <div className={infoClass}>Email: {data.info.email}</div>
+            <div className={infoClass}>Contact: {data.info.contact}</div>   
             <div className="flex gap-4 mt-2">
-              {footer.socials.map(social => (
+              {data.socials.map(social => (
                 <a
                   key={social.platform}
                   href={social.url}
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="text-gray-400 hover:text-yellow-400 transition-colors"
+                  className={socialClass}
                   aria-label={social.platform}
                 >
                   {socialIcons[social.platform]}
@@ -156,7 +192,7 @@ const Footer: React.FC = () => {
       </div>
 
       <div className="text-center text-xs lg:text-base text-gray-500 mt-10 border-t border-neutral-800 pt-6 tracking-wide font-normal">
-        {footer.copyright}
+        {data.copyright}
       </div>
     </footer>
   );

@@ -32,8 +32,8 @@ const Home = () => {
   return (
     <div className="w-full">
       {data && <HeroSection data={data} />}
-      <TestimonialsSection data={data?.testimonials ?? []} />
-      <ServicesSection data={data?.services ?? []} />
+      {data && <TestimonialsSection data={data} />}
+      {data && <ServicesSection data={data} />}
     </div>
   );
 };
