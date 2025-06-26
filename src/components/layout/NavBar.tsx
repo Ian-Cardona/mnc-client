@@ -1,8 +1,19 @@
-import { Menu } from 'lucide-react';
+import { Menu, X } from 'lucide-react';
+import { useState } from 'react';
 import { useNavBar } from '../../features/navbar/hooks/useNavBar';
+import mncLogo from '../../assets/mnc-logo.png';
 
 const NavBar = () => {
   const { data, isLoading, isError } = useNavBar();
+  const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
+
+  const toggleMobileMenu = () => {
+    setIsMobileMenuOpen(!isMobileMenuOpen);
+  };
+
+  const closeMobileMenu = () => {
+    setIsMobileMenuOpen(false);
+  };
 
   if (isLoading) {
     return (
@@ -44,10 +55,17 @@ const NavBar = () => {
   return (
     <nav className="w-full flex items-center justify-between px-6 py-4 border-b border-neutral-200 bg-white/80 backdrop-blur-md shadow-sm font-dm-sans sticky top-0 z-30">
       <div className="flex items-center gap-8">
-        <div className="text-3xl font-extrabold tracking-tight flex items-center gap-2">
-          <span className="block w-1.5 h-8 bg-yellow-400 rounded-full mr-2"></span>
-          MNC
-        </div>
+        <a href="/" className="text-3xl font-extrabold tracking-tight flex items-center gap-2 hover:opacity-80 transition-opacity">
+          <img src={mncLogo} alt="MNC Logo" className="h-8 w-auto" />
+          <div className="hidden lg:flex items-center gap-2 transition-all duration-300 ease-in-out">
+            <span>MNC</span>
+            <div className="flex flex-col text-sm leading-tight transition-all duration-300 ease-in-out">
+              <span>Bookkeeping</span>
+              <span>Services</span>
+            </div>
+          </div>
+          <span className="lg:hidden transition-all duration-300 ease-in-out">MNCBS</span>
+        </a>
         <div className="hidden md:flex gap-8 text-lg text-gray-700 font-medium">
           {data?.links.map((link) => (
             <a href={link.path} className="hover:text-yellow-500 transition-colors duration-150">{link.label}</a>
@@ -63,10 +81,45 @@ const NavBar = () => {
         >
           {data?.cta?.label}
         </a>
-        <button className="md:hidden text-gray-700 p-2 rounded-lg hover:bg-yellow-100 transition">
-          <Menu size={24} />
+        <button 
+          onClick={toggleMobileMenu}
+          className="md:hidden text-gray-700 p-2 rounded-lg hover:bg-yellow-100 transition"
+          aria-label="Toggle mobile menu"
+        >
+          {isMobileMenuOpen ? <X size={24} /> : <Menu size={24} />}
         </button>
       </div>
+
+      {/* Mobile Menu Dropdown */}
+      {isMobileMenuOpen && (
+        <div className="absolute top-full left-0 right-0 bg-white border-b border-neutral-200 shadow-lg md:hidden z-40">
+          <div className="px-6 py-4 space-y-4">
+            <div className="space-y-3">
+              {data?.links.map((link) => (
+                <a
+                  key={link.path}
+                  href={link.path}
+                  onClick={closeMobileMenu}
+                  className="block text-lg text-gray-700 font-medium hover:text-yellow-500 transition-colors duration-150 py-2 border-b border-gray-100 last:border-b-0"
+                >
+                  {link.label}
+                </a>
+              ))}
+            </div>
+            <div className="pt-4 border-t border-gray-200">
+              <a
+                href={data?.cta?.url}
+                target="_blank"
+                rel="noopener noreferrer"
+                onClick={closeMobileMenu}
+                className="block w-full text-center px-6 py-3 bg-gradient-to-r from-emerald-400 via-emerald-500 to-emerald-600 text-white rounded-xl font-bold shadow hover:from-emerald-500 hover:to-emerald-700 transition-all duration-150 focus:outline-none focus:ring-2 focus:ring-emerald-300 focus:ring-opacity-50"
+              >
+                {data?.cta?.label}
+              </a>
+            </div>
+          </div>
+        </div>
+      )}
     </nav>
   );
 };
