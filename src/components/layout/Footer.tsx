@@ -16,7 +16,6 @@ const socialIcons: Record<Platform, React.JSX.Element> = {
   ),
 };
 
-// Reusable input/textarea field component
 const InputField: React.FC<{
   as?: 'input' | 'textarea';
   type?: string;
