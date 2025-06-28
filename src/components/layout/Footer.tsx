@@ -3,6 +3,8 @@ import { useState, useRef, useEffect } from 'react';
 import type { Platform } from '../../features/footer/types/footer.type';
 import { fetchFooter, submitContactForm } from '../../features/footer/api/footer.api';
 import { useQuery } from '@tanstack/react-query';
+import LoadingSpinner from '../LoadingSpinner';
+import ErrorState from '../ErrorState';
 
 const socialIcons: Record<Platform, React.JSX.Element> = {
   facebook: (
@@ -16,23 +18,56 @@ const socialIcons: Record<Platform, React.JSX.Element> = {
   ),
 };
 
-const InputField: React.FC<{
-  as?: 'input' | 'textarea';
+interface InputFieldProps {
   type?: string;
   placeholder: string;
+  required?: boolean;
   value: string;
   onChange: (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => void;
   disabled?: boolean;
-  required?: boolean;
+  as?: 'input' | 'textarea';
   rows?: number;
   className?: string;
-}> = ({ as = 'input', type = 'text', ...props }) => {
-  const baseClass =
-    'font-lato px-4 py-2 lg:px-6 lg:py-3 rounded-md bg-neutral-900 text-gray-100 placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-yellow-400 border border-neutral-700 font-normal text-base lg:text-lg';
+}
+
+const InputField: React.FC<InputFieldProps> = ({ 
+  type = 'text', 
+  placeholder, 
+  required = false, 
+  value, 
+  onChange, 
+  disabled = false,
+  as = 'input',
+  rows,
+  className = '',
+}) => {
+  const baseClass = 'w-full px-4 py-3 lg:px-6 lg:py-4 bg-neutral-700 text-white placeholder-gray-400 rounded-lg border border-neutral-600 focus:border-yellow-400 focus:outline-none focus:ring-2 focus:ring-yellow-400 focus:ring-opacity-50 transition-all duration-200 disabled:opacity-60 disabled:cursor-not-allowed text-base lg:text-lg';
+  
   if (as === 'textarea') {
-    return <textarea {...props} className={baseClass + (props.className ? ' ' + props.className : '')} />;
+    return (
+      <textarea
+        placeholder={placeholder}
+        required={required}
+        value={value}
+        onChange={onChange}
+        disabled={disabled}
+        rows={rows}
+        className={`${baseClass} ${className}`}
+      />
+    );
   }
-  return <input {...props} type={type} className={baseClass + (props.className ? ' ' + props.className : '')} />;
+  
+  return (
+    <input
+      type={type}
+      placeholder={placeholder}
+      required={required}
+      value={value}
+      onChange={onChange}
+      disabled={disabled}
+      className={`${baseClass} ${className}`}
+    />
+  );
 };
 
 // Reusable section header
@@ -96,8 +131,8 @@ const Footer: React.FC = () => {
   if (isLoading) {
     return (
       <footer className="bg-neutral-900 text-gray-200 px-6 py-16 font-dm-sans">
-        <div className="max-w-6xl mx-auto text-center">
-          <div className="text-lg font-medium text-gray-400">Loading footer...</div>
+        <div className="max-w-6xl mx-auto">
+          <LoadingSpinner message="Loading footer..." size="sm" />
         </div>
       </footer>
     );
@@ -106,8 +141,12 @@ const Footer: React.FC = () => {
   if (isError || !data) {
     return (
       <footer className="bg-neutral-900 text-gray-200 px-6 py-16 font-dm-sans">
-        <div className="max-w-6xl mx-auto text-center">
-          <div className="text-red-400 text-lg font-medium">Failed to load footer</div>
+        <div className="max-w-6xl mx-auto">
+          <ErrorState 
+            message="Failed to load footer" 
+            onRetry={() => window.location.reload()}
+            retryText="Retry"
+          />
         </div>
       </footer>
     );
