@@ -2,6 +2,7 @@ import { Menu, X } from 'lucide-react';
 import { useState } from 'react';
 import { Link, useLocation } from 'react-router-dom';
 import { useNavBar } from '../../features/navbar/hooks/useNavBar';
+import ErrorState from '../ErrorState';
 import mncLogo from '../../assets/mnc-logo.png';
 
 const NavBar = () => {
@@ -42,18 +43,15 @@ const NavBar = () => {
       </nav>
     );
   }
+  
   if (isError) {
     return (
       <nav className="w-full flex items-center justify-between px-6 py-4 border-b border-neutral-200 bg-white/80 backdrop-blur-md shadow-sm font-dm-sans sticky top-0 z-30 min-h-[72px]">
-        <div className="flex items-center gap-4 w-full justify-between">
-          <div className="text-red-500 text-lg font-semibold">Failed to load navigation</div>
-          <button
-            onClick={() => window.location.reload()}
-            className="px-4 py-2 bg-yellow-400 hover:bg-yellow-500 text-black rounded-md font-semibold transition-colors shadow-md"
-          >
-            Retry
-          </button>
-        </div>
+        <ErrorState 
+          message="Failed to load navigation" 
+          onRetry={() => window.location.reload()}
+          retryText="Retry"
+        />
       </nav>
     );
   }
