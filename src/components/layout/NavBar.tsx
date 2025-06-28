@@ -1,11 +1,13 @@
 import { Menu, X } from 'lucide-react';
 import { useState } from 'react';
+import { Link, useLocation } from 'react-router-dom';
 import { useNavBar } from '../../features/navbar/hooks/useNavBar';
 import mncLogo from '../../assets/mnc-logo.png';
 
 const NavBar = () => {
   const { data, isLoading, isError } = useNavBar();
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
+  const location = useLocation();
 
   const toggleMobileMenu = () => {
     setIsMobileMenuOpen(!isMobileMenuOpen);
@@ -13,6 +15,10 @@ const NavBar = () => {
 
   const closeMobileMenu = () => {
     setIsMobileMenuOpen(false);
+  };
+
+  const isActiveLink = (path: string) => {
+    return location.pathname === path;
   };
 
   if (isLoading) {
@@ -55,7 +61,7 @@ const NavBar = () => {
   return (
     <nav className="w-full flex items-center justify-between px-6 py-4 border-b border-neutral-200 bg-white/80 backdrop-blur-md shadow-sm font-dm-sans sticky top-0 z-30">
       <div className="flex items-center gap-8">
-        <a href="/" className="text-3xl font-extrabold tracking-tight flex items-center gap-2 hover:opacity-80 transition-opacity">
+        <Link to="/" className="text-3xl font-extrabold tracking-tight flex items-center gap-2 hover:opacity-80 transition-opacity">
           <img src={mncLogo} alt="MNC Logo" className="h-8 w-auto" />
           <div className="hidden lg:flex items-center gap-2 transition-all duration-300 ease-in-out">
             <span>MNC</span>
@@ -65,11 +71,38 @@ const NavBar = () => {
             </div>
           </div>
           <span className="lg:hidden transition-all duration-300 ease-in-out">MNCBS</span>
-        </a>
+        </Link>
         <div className="hidden md:flex gap-8 text-lg text-gray-700 font-medium">
-          {data?.links.map((link) => (
-            <a href={link.path} className="hover:text-yellow-500 transition-colors duration-150">{link.label}</a>
-          ))}
+          {data?.links.map((link) => {
+            // Check if it's an internal route or external link
+            const isInternalRoute = link.path.startsWith('/') && !link.path.startsWith('http');
+            
+            if (isInternalRoute) {
+              return (
+                <Link
+                  key={link.path}
+                  to={link.path}
+                  className={`hover:text-yellow-500 transition-colors duration-150 ${
+                    isActiveLink(link.path) ? 'text-yellow-500 font-semibold' : ''
+                  }`}
+                >
+                  {link.label}
+                </Link>
+              );
+            } else {
+              return (
+                <a
+                  key={link.path}
+                  href={link.path}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="hover:text-yellow-500 transition-colors duration-150"
+                >
+                  {link.label}
+                </a>
+              );
+            }
+          })}
         </div>
       </div>
       <div className="flex items-center gap-2">
@@ -95,16 +128,37 @@ const NavBar = () => {
         <div className="absolute top-full left-0 right-0 bg-white border-b border-neutral-200 shadow-lg md:hidden z-40">
           <div className="px-6 py-4 space-y-4">
             <div className="space-y-3">
-              {data?.links.map((link) => (
-                <a
-                  key={link.path}
-                  href={link.path}
-                  onClick={closeMobileMenu}
-                  className="block text-lg text-gray-700 font-medium hover:text-yellow-500 transition-colors duration-150 py-2 border-b border-gray-100 last:border-b-0"
-                >
-                  {link.label}
-                </a>
-              ))}
+              {data?.links.map((link) => {
+                const isInternalRoute = link.path.startsWith('/') && !link.path.startsWith('http');
+                
+                if (isInternalRoute) {
+                  return (
+                    <Link
+                      key={link.path}
+                      to={link.path}
+                      onClick={closeMobileMenu}
+                      className={`block text-lg font-medium transition-colors duration-150 py-2 border-b border-gray-100 last:border-b-0 ${
+                        isActiveLink(link.path) ? 'text-yellow-500 font-semibold' : 'text-gray-700 hover:text-yellow-500'
+                      }`}
+                    >
+                      {link.label}
+                    </Link>
+                  );
+                } else {
+                  return (
+                    <a
+                      key={link.path}
+                      href={link.path}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      onClick={closeMobileMenu}
+                      className="block text-lg text-gray-700 font-medium hover:text-yellow-500 transition-colors duration-150 py-2 border-b border-gray-100 last:border-b-0"
+                    >
+                      {link.label}
+                    </a>
+                  );
+                }
+              })}
             </div>
             <div className="pt-4 border-t border-gray-200">
               <a
