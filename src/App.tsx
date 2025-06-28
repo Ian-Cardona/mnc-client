@@ -1,17 +1,10 @@
 // import { API_BASE_URL } from './lib/env';
-import Footer from './components/layout/Footer';
-import NavBar from './components/layout/NavBar';
-import Home from './pages/Home';
+import { RouterProvider } from 'react-router-dom';
+import { router } from './routes';
 
 function App() {
   return (
-    <div style={{ minHeight: '100vh', display: 'flex', flexDirection: 'column' }}>
-      <NavBar />
-      <div style={{ flex: 1 }}>
-        <Home />
-      </div>
-      <Footer />
-    </div>
+    <RouterProvider router={router} />
   );
 }
 

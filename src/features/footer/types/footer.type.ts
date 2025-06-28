@@ -25,3 +25,9 @@ export interface IFooter {
   info: IFooterInfo;
   copyright: string;
 }
+
+export interface IFooterFormInput {
+  emailer: string;
+  contact: string;
+  message: string;
+};

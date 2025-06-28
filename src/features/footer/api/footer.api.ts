@@ -1,26 +1,22 @@
 import axios from 'axios';
-import type { IFooter } from '../types/footer.type';
+import type { IFooter, IFooterFormInput } from '../types/footer.type';
 import { API_BASE_URL } from '../../../lib/env';
+import { validateAndSanitizeFooterForm } from '../../../utils/validation';
 
 export const fetchFooter = async (): Promise<IFooter> => {
   const response = await axios.get<{ data: IFooter }>(`${API_BASE_URL}/footer`);
   return response.data.data;
 };
 
-// Contact form submission
-export interface ContactFormData {
-  email: string;
-  phone: string;
-  message: string;
-}
-
-export interface ContactFormResponse {
-  success: boolean;
-  message: string;
-  id?: string;
-}
-
-export const submitContactForm = async (formData: ContactFormData): Promise<ContactFormResponse> => {
-  const response = await axios.post<ContactFormResponse>(`${API_BASE_URL}/contact`, formData);
+export const submitContactForm = async (formData: IFooterFormInput): Promise<IFooterFormInput> => {
+  // Validate and sanitize the form data before sending
+  const validationResult = validateAndSanitizeFooterForm(formData);
+  
+  if (!validationResult.success) {
+    throw new Error(JSON.stringify(validationResult.errors));
+  }
+  
+  // Use the sanitized and validated data
+  const response = await axios.post<IFooterFormInput>(`${API_BASE_URL}/footer/email`, validationResult.data);
   return response.data;
 }; 

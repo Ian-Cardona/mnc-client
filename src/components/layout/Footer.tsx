@@ -1,7 +1,7 @@
 import * as React from 'react';
 import { useState, useRef, useEffect } from 'react';
 import type { Platform } from '../../features/footer/types/footer.type';
-import { fetchFooter } from '../../features/footer/api/footer.api';
+import { fetchFooter, submitContactForm } from '../../features/footer/api/footer.api';
 import { useQuery } from '@tanstack/react-query';
 
 const socialIcons: Record<Platform, React.JSX.Element> = {
@@ -64,17 +64,31 @@ const Footer: React.FC = () => {
     if (error) setError('');
     if (success) setSuccess(false);
     setLoading(true);
-    new Promise((res) => setTimeout(res, 1200))
+    
+    submitContactForm({ emailer: email, contact: phone, message })
       .then(() => {
         setSuccess(true);
         setEmail('');
         setPhone('');
         setMessage('');
+        setLoading(false);
       })
-      .catch(() => {
-        setError('Something went wrong. Please try again.');
-      })
-      .finally(() => {
+      .catch((err: unknown) => {
+        try {
+          // Try to parse validation errors
+          const errorMessage = err instanceof Error ? err.message : String(err);
+          const errorData = JSON.parse(errorMessage) as Record<string, unknown>;
+          if (typeof errorData === 'object' && errorData !== null) {
+            // Display the first validation error
+            const firstError = Object.values(errorData)[0];
+            setError(typeof firstError === 'string' ? firstError : 'Please check your input and try again.');
+          } else {
+            setError('Something went wrong. Please try again.');
+          }
+        } catch {
+          // If parsing fails, show generic error
+          setError('Something went wrong. Please try again.');
+        }
         setLoading(false);
       });
   };
