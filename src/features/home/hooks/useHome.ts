@@ -1,10 +1,10 @@
 import { useQuery } from '@tanstack/react-query';
-import { fetchNavBar } from '../api/navbar.api';
+import { fetchHome } from '../api/home.api';
 
-export const useNavBar = () => {
+export const useHome = () => {
   return useQuery({
-    queryKey: ['navbar', 'data'],
-    queryFn: fetchNavBar,
+    queryKey: ['home', 'data'],
+    queryFn: fetchHome,
     staleTime: 5 * 60 * 1000, // 5 minutes
     gcTime: 10 * 60 * 1000, // 10 minutes
     retry: 1,

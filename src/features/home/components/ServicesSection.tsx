@@ -8,7 +8,7 @@ type Props = {
 
 const ServicesSection = ({ data }: Props) => {
   return (
-    <section className="w-full py-12 lg:py-24 font-dm-sans bg-gray-50">
+    <section className="w-full py-12 lg:py-24 font-dm-sans">
       <div className="max-w-6xl mx-auto px-4">
         <h2 className="text-3xl lg:text-5xl font-dm-sans font-bold text-center mb-4 text-gray-800">
           {data.servicesHeader}
