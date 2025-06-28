@@ -1,4 +1,3 @@
-
 export interface IAbout {
   hero: IAboutHero;
   story: IAboutStory;
@@ -18,34 +17,33 @@ export interface IAboutHero {
 export interface IAboutStory {
   title: string;
   paragraphs: string[];
-  highlight: {
-    title: string;
-    description: string;
-    icon?: string;
-  };
+  highlight?: IAboutHighlight;
 }
 
 export interface IAboutLocation {
   title: string;
   address: string;
-  coordinates?: {
-    latitude: number;
-    longitude: number;
-  };
+}
+
+export interface IAboutContact {
+  title: string;
+  description: string;
+  ctaText?: string;
+  ctaIcon?: string;
+}
+
+export interface IAboutHighlight {
+  title: string;
+  description: string;
+  icon?: string;
 }
 
 export interface IAboutValue {
   id: string;
   title: string;
   description: string;
-  icon: string; 
+  icon: string;
   order: number;
-}
-
-export interface IAboutApproach {
-  title: string;
-  description: string;
-  members: IAboutTeamMember[];
 }
 
 export interface IAboutTeamMember {
@@ -64,11 +62,10 @@ export interface IAboutStat {
   order: number;
 }
 
-export interface IAboutContact {
+export interface IAboutApproach {
   title: string;
   description: string;
-  ctaText: string;
-  ctaIcon: string;
+  members: IAboutTeamMember[];
 }
 
 export interface IAboutResponse {
@@ -143,4 +140,4 @@ export interface AboutContactModel {
   cta_icon: string;
   created_at: Date;
   updated_at: Date;
-} 
+}
