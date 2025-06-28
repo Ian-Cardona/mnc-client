@@ -9,14 +9,10 @@ export const fetchFooter = async (): Promise<IFooter> => {
 };
 
 export const submitContactForm = async (formData: IFooterFormInput): Promise<IFooterFormInput> => {
-  // Validate and sanitize the form data before sending
   const validationResult = validateAndSanitizeFooterForm(formData);
-  
   if (!validationResult.success) {
     throw new Error(JSON.stringify(validationResult.errors));
   }
-  
-  // Use the sanitized and validated data
   const response = await axios.post<IFooterFormInput>(`${API_BASE_URL}/footer/email`, validationResult.data);
   return response.data;
 }; 

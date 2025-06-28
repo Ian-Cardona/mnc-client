@@ -1,10 +1,13 @@
 // import { API_BASE_URL } from './lib/env';
 import { RouterProvider } from 'react-router-dom';
 import { router } from './routes';
+import ErrorBoundary from './components/ErrorBoundary';
 
 function App() {
   return (
-    <RouterProvider router={router} />
+    <ErrorBoundary>
+      <RouterProvider router={router} />
+    </ErrorBoundary>
   );
 }
 

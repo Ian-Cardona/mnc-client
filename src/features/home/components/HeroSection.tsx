@@ -7,7 +7,7 @@ type Props = {
 
 const HeroSection = ({ data }: Props) => {
   return (
-    <section className="mx-10 my-12 space-y-4 lg:my-24 lg:space-y-12">
+    <section className="px-10 py-12 space-y-4 lg:py-24 lg:space-y-12">
       <div className="space-y-8 lg:flex lg:items-center lg:justify-between lg:space-y-0 lg:gap-12">
         <h1 className="text-6xl lg:text-[10rem] font-dm-sans font-medium">{data.hero.title}</h1>
         <h2 className="text-lg lg:text-3xl font-lato max-w-2xl lg:max-w-xl lg:ml-8">

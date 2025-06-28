@@ -4,7 +4,6 @@ import type { Platform } from '../../features/footer/types/footer.type';
 import { fetchFooter, submitContactForm } from '../../features/footer/api/footer.api';
 import { useQuery } from '@tanstack/react-query';
 import LoadingSpinner from '../LoadingSpinner';
-import ErrorState from '../ErrorState';
 
 const socialIcons: Record<Platform, React.JSX.Element> = {
   facebook: (
@@ -138,15 +137,18 @@ const Footer: React.FC = () => {
     );
   }
 
-  if (isError || !data) {
+  if (isError || !data || !data.links || !data.socials || !data.info) {
     return (
       <footer className="bg-neutral-900 text-gray-200 px-6 py-16 font-dm-sans">
         <div className="max-w-6xl mx-auto">
-          <ErrorState 
-            message="Failed to load footer" 
-            onRetry={() => window.location.reload()}
-            retryText="Retry"
-          />
+          <div className="text-center">
+            <h2 className="text-2xl lg:text-4xl font-semibold mb-4 tracking-tight text-white">Control your finances now</h2>
+            <p className="text-base lg:text-xl text-gray-400 mb-6">We'd love to hear from you.</p>
+            <div className="text-gray-500">
+              <p>Contact us at: info@mncbookkeeping.com</p>
+              <p>Phone: +1 (555) 123-4567</p>
+            </div>
+          </div>
         </div>
       </footer>
     );
@@ -206,7 +208,7 @@ const Footer: React.FC = () => {
         <div className="w-full md:w-1/2 flex flex-col md:flex-row gap-8 md:gap-20 lg:gap-32">
           <div className="flex-1 flex flex-col gap-3 text-base lg:text-xl">
             <SectionHeader>Company</SectionHeader>
-            {data.links
+            {(data.links || [])
               .filter(link => link.label && link.path && link.label.toLowerCase() !== 'contact' && (link.label.toLowerCase() !== 'external link' || (link.label.toLowerCase() === 'external link' && link.path)))
               .map(link => (
                 <a
@@ -222,11 +224,11 @@ const Footer: React.FC = () => {
           </div>
           <div className="flex-1 flex flex-col gap-2">
             <SectionHeader>Contact</SectionHeader>
-            <div className={infoClass}>Address: {data.info.address}</div>
-            <div className={infoClass}>Email: {data.info.email}</div>
-            <div className={infoClass}>Contact: {data.info.contact}</div>   
+            <div className={infoClass}>Address: {data.info?.address || 'Address not available'}</div>
+            <div className={infoClass}>Email: {data.info?.email || 'info@mncbookkeeping.com'}</div>
+            <div className={infoClass}>Contact: {data.info?.contact || '+1 (555) 123-4567'}</div>   
             <div className="flex gap-4 mt-2">
-              {data.socials.map(social => (
+              {(data.socials || []).map(social => (
                 <a
                   key={social.platform}
                   href={social.url}
@@ -244,7 +246,7 @@ const Footer: React.FC = () => {
       </div>
 
       <div className="text-center text-xs lg:text-base text-gray-500 mt-10 border-t border-neutral-800 pt-6 tracking-wide font-normal">
-        {data.copyright}
+        {data.copyright || '© 2024 MNC Bookkeeping Services Inc. All rights reserved.'}
       </div>
     </footer>
   );
