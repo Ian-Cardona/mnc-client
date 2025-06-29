@@ -7,24 +7,25 @@ import {
   ServicesListSection,
   CTASection,
 } from '../features/services/components';
+import { getErrorMessage, getLoadingMessage } from '../utils/errorHandling';
 
 const Services = () => {
-  const { data: servicesData, isLoading, error, refetch } = useServices();
+  const { data: servicesData, isLoading, isError, refetch } = useServices();
 
   // Loading state
   if (isLoading) {
-    return <LoadingSpinner />;
+    return <LoadingSpinner message={getLoadingMessage('services')} />;
   }
 
   // Error state
-  if (error || !servicesData) {
+  if (isError || !servicesData) {
     return (
       <ErrorState 
-        message="Failed to load services data. Please try again later."
+        message={getErrorMessage('services')}
         onRetry={() => {
           void refetch();
         }}
-        retryText="Refresh Page"
+        retryText="Retry"
       />
     );
   }

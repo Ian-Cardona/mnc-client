@@ -15,7 +15,6 @@ export const getIconComponent = (iconName: string) => {
   return iconMap[iconName] || <FileText className="w-6 h-6" />;
 };
 
-// Icon mapping function for service icons (larger)
 export const getServiceIconComponent = (iconName: string) => {
   const iconMap: { [key: string]: React.ReactNode } = {
     'FileText': <FileText className="w-12 h-12" />,

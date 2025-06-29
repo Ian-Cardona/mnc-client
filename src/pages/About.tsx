@@ -10,31 +10,22 @@ import {
   TeamSection,
   ContactCTASection,
 } from '../features/about/components';
+import { getErrorMessage, getLoadingMessage } from '../utils/errorHandling';
 
 const About = () => {
-  const { data: aboutData, isLoading, error, refetch } = useAbout();
+  const { data: aboutData, isLoading, isError, refetch } = useAbout();
 
   if (isLoading) {
-    return <LoadingSpinner message="Loading about information..." />;
+    return <LoadingSpinner message={getLoadingMessage('about')} />;
   }
 
-  if (error) {
+  if (isError || !aboutData) {
     return (
       <ErrorState 
-        message="Failed to load about information" 
+        message={getErrorMessage('about')} 
         onRetry={() => { void refetch(); }}
         retryText="Retry"
       />
-    );
-  }
-
-  if (!aboutData) {
-    return (
-      <div className="w-full flex-1 flex items-center justify-center">
-        <div className="text-center">
-          <p className="text-gray-600 font-lato">No about information available</p>
-        </div>
-      </div>
     );
   }
 

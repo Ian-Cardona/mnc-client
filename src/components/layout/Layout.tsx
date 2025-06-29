@@ -13,7 +13,7 @@ const Layout = () => {
     <div className="min-h-screen flex flex-col">
       <NavBar />
       <div className="flex-1">
-        <Suspense fallback={<LoadingSpinner />}>
+        <Suspense fallback={<LoadingSpinner message="Loading page..." />}>
           <Outlet key={location.pathname} />
         </Suspense>
       </div>

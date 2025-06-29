@@ -22,9 +22,10 @@ const NavBar = () => {
   };
 
   const defaultLinks = [
-    { path: '/', label: 'Home' },
-    { path: '/about', label: 'About' },
+    { path: '/guides', label: 'Guides' },
     { path: '/services', label: 'Services' },
+    { path: '/about', label: 'About' },    
+    { path: '/contact', label: 'Contact' },
   ];
 
   const defaultCta = {
