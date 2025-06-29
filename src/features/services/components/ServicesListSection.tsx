@@ -12,6 +12,8 @@ const ServicesListSection = ({ services }: ServicesListSectionProps) => {
     </div>
   );
 
+  
+
   return (
     <section className="py-20 px-6 bg-white">
       <div className="max-w-6xl mx-auto">
@@ -31,7 +33,7 @@ const ServicesListSection = ({ services }: ServicesListSectionProps) => {
               <div className={`md:flex items-center ${index % 2 === 1 ? 'md:flex-row-reverse' : ''}`}>
                 <div className="md:w-1/2 p-8 md:p-12">
                   <div className="flex items-center gap-4 mb-6">
-                    <div className={`inline-flex items-center justify-center w-16 h-16 bg-gradient-to-r ${service.color} rounded-xl text-white`}>
+                    <div className={'inline-flex items-center justify-center w-16 h-16 bg-gradient-to-r from-purple-500 to-purple-700 rounded-xl'}>
                       <IconWrapper icon={getServiceIconComponent(service.icon)} />
                     </div>
                     <h3 className="text-4xl lg:text-5xl font-dm-sans font-medium text-gray-900">

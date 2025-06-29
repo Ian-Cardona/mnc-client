@@ -17,7 +17,7 @@ const WhyChooseUsSection = ({ whyChooseUs }: WhyChooseUsSectionProps) => {
       <div className="max-w-6xl mx-auto">
         <div className="text-center mb-16">
           <h2 className="text-4xl lg:text-5xl font-dm-sans font-medium text-gray-900 mb-4">
-            Why Choose MNC Bookkeeping Services Inc.?
+            Why Choose MNC Bookkeeping Services?
           </h2>
           <div className="w-24 h-1 bg-gradient-to-r from-yellow-400 to-emerald-500 mx-auto rounded-full"></div>
         </div>

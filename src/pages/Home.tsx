@@ -19,7 +19,7 @@ const Home = () => {
   );
 
   return (
-    <div className="w-full h-full">
+    <div className="w-full">
       {data && <HeroSection data={data} />}
       {data && <TestimonialsSection data={data} />}
       {data && <ServicesSection data={data} />}
