@@ -11,10 +11,13 @@ const LoadingSpinner = ({ message = 'Loading...', size = 'md' }: LoadingSpinnerP
   };
 
   return (
-    <div className="w-full flex-1 flex items-center justify-center">
-      <div className="text-center">
-        <div className={`animate-spin rounded-full border-b-2 border-yellow-500 mx-auto mb-4 ${sizeClasses[size]}`}></div>
-        <p className="text-gray-600 font-lato">{message}</p>
+    <div className="w-full flex-1 flex items-center justify-center min-h-[400px]">
+      <div className="text-center max-w-md mx-auto px-6">
+        <div className={`animate-spin rounded-full border-b-2 border-yellow-500 mx-auto mb-6 ${sizeClasses[size]}`}></div>
+        <h3 className="text-xl font-dm-sans font-medium text-gray-900 mb-3">
+          Loading...
+        </h3>
+        <p className="text-gray-600 font-lato leading-relaxed">{message}</p>
       </div>
     </div>
   );

@@ -1,9 +1,9 @@
 import * as React from 'react';
 import { useState, useRef, useEffect } from 'react';
 import type { Platform } from '../../features/footer/types/footer.type';
-import { fetchFooter, submitContactForm } from '../../features/footer/api/footer.api';
-import { useQuery } from '@tanstack/react-query';
+import { submitContactForm } from '../../features/footer/api/footer.api';
 import LoadingSpinner from '../LoadingSpinner';
+import { useFooter } from '../../features/footer/hooks/useFooter';
 
 const socialIcons: Record<Platform, React.JSX.Element> = {
   facebook: (
@@ -75,10 +75,8 @@ const SectionHeader: React.FC<{ children: React.ReactNode }> = ({ children }) =>
 );
 
 const Footer: React.FC = () => {
-  const { data, isLoading, isError } = useQuery({
-    queryKey: ['footer'],
-    queryFn: fetchFooter,
-  });
+  const { data, isLoading, isError } = useFooter();
+
   const [email, setEmail] = useState('');
   const [phone, setPhone] = useState('');
   const [message, setMessage] = useState('');
@@ -145,8 +143,8 @@ const Footer: React.FC = () => {
             <h2 className="text-2xl lg:text-4xl font-semibold mb-4 tracking-tight text-white">Control your finances now</h2>
             <p className="text-base lg:text-xl text-gray-400 mb-6">We'd love to hear from you.</p>
             <div className="text-gray-500">
-              <p>Contact us at: info@mncbookkeeping.com</p>
-              <p>Phone: +1 (555) 123-4567</p>
+              <p>Contact us at: mnc.bookkeeping.servicesph@gmail.com</p>
+              <p>Phone: (02) 869-36325</p>
             </div>
           </div>
         </div>

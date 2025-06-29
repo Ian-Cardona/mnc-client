@@ -2,29 +2,20 @@ import { Phone, Mail, MapPin, Facebook, Linkedin } from 'lucide-react';
 import LoadingSpinner from '../components/LoadingSpinner';
 import ErrorState from '../components/ErrorState';
 import { useContact } from '../features/contact/hooks/useContact';
+import { getErrorMessage, getLoadingMessage } from '../utils/errorHandling';
 
 const Contact = () => {
   const { data, isLoading, isError, refetch } = useContact();
 
-  if (isLoading) return <LoadingSpinner message="Loading contact information..." />;
+  if (isLoading) return <LoadingSpinner message={getLoadingMessage('contact')} />;
 
-  if (isError) return (
+  if (isError || !data) return (
     <ErrorState 
-      message="Oops! Something went wrong while loading the contact information." 
+      message={getErrorMessage('contact')} 
       onRetry={() => { void refetch(); }}
       retryText="Retry"
     />
   );
-
-  if (!data) {
-    return (
-      <div className="w-full flex-1 flex items-center justify-center">
-        <div className="text-center">
-          <p className="text-gray-600 font-lato">No contact information available</p>
-        </div>
-      </div>
-    );
-  }
 
   return (
     <div className="w-full">

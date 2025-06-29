@@ -1,7 +1,8 @@
 import { useState, useCallback } from 'react';
-import { submitContactForm } from '../api/footer.api';
+import { fetchFooter, submitContactForm } from '../api/footer.api';
 import { validateAndSanitizeFooterForm } from '../../../utils/validation';
 import type { IFooterFormInput } from '../types/footer.type';
+import { useQuery } from '@tanstack/react-query';
 
 interface UseFooterFormReturn {
   formData: IFooterFormInput;
@@ -13,6 +14,17 @@ interface UseFooterFormReturn {
   resetForm: () => void;
   validateField: (field: keyof IFooterFormInput) => void;
 }
+
+export const useFooter = () => { 
+  return useQuery({
+    queryKey: ['footer'],
+    queryFn: fetchFooter,
+    staleTime: 1 * 60 * 1000,
+    retry: 5,
+    retryDelay: 1000,
+    refetchOnWindowFocus: true,
+  });
+};
 
 export const useFooterForm = (): UseFooterFormReturn => {
   const [formData, setFormData] = useState<IFooterFormInput>({
