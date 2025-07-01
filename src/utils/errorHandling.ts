@@ -25,6 +25,7 @@ export const useErrorHandling = <TData, TError>(
 export const ERROR_MESSAGES = {
   home: 'Failed to load homepage data. Please try again later.',
   about: 'Failed to load about information. Please try again later.',
+  guides: 'Failed to load guides information. Please try again later.',
   services: 'Failed to load services data. Please try again later.',
   contact: 'Failed to load contact information. Please try again later.',
   generic: 'Something went wrong. Please try again later.',
@@ -36,6 +37,7 @@ export const ERROR_MESSAGES = {
 export const LOADING_MESSAGES = {
   home: 'Loading homepage...',
   about: 'Loading about information...',
+  guides: 'Loading guides...',
   services: 'Loading services...',
   contact: 'Loading contact information...',
   generic: 'Loading...',

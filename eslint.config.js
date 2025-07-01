@@ -9,8 +9,7 @@ import globals from 'globals';
 
 export default tseslint.config(
   {
-    
-    files: ['**/*.{ts,tsx}'],
+    files: ['src/**/*.{ts,tsx}'],
     ignores: ['dist', 'build', 'node_modules'],
     languageOptions: {
       ecmaVersion: 2020,
@@ -54,6 +53,38 @@ export default tseslint.config(
       react: {
         version: 'detect',
       },
+    },
+  },
+  {
+    files: ['tests/**/*.{ts,tsx}', 'playwright.config.ts'],
+    ignores: ['dist', 'build', 'node_modules'],
+    languageOptions: {
+      ecmaVersion: 2020,
+      globals: globals.node,
+      parserOptions: {
+        project: './tsconfig.test.json',
+        tsconfigRootDir: new URL('.', import.meta.url),
+      },
+    },
+    plugins: {
+      '@stylistic': stylistic,
+    },
+    extends: [
+      eslint.configs.recommended,
+      ...tseslint.configs.recommendedTypeChecked,
+    ],
+    rules: {
+      '@typescript-eslint/no-unused-vars': ['error', {
+        argsIgnorePattern: '^_',
+        varsIgnorePattern: '^_',
+      }],
+      '@typescript-eslint/no-explicit-any': 'warn',
+
+      '@stylistic/semi': ['error', 'always'],
+      '@stylistic/indent': ['error', 2],
+      '@stylistic/quotes': ['error', 'single'],
+      '@stylistic/comma-dangle': ['error', 'always-multiline'],
+      '@stylistic/object-curly-spacing': ['error', 'always'],
     },
   }
 );
